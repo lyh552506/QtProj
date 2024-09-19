@@ -1,1 +1,4 @@
 build/
+.cache/
+config.yaml
+.vscode/
