@@ -14,7 +14,7 @@
 #include "Rectangle.hpp"
 #include "Component.hpp"
 #include "Wire.hpp"
-// #include "Resistor.hpp"
+#include "Resistor.hpp"
 class GraphicsView : public QGraphicsView {
 public:
     GraphicsView(QGraphicsScene*, QWidget* parent = nullptr);
