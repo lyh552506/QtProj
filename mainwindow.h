@@ -17,7 +17,7 @@
 #include "Resistor.hpp"
 class GraphicsView : public QGraphicsView {
 public:
-    GraphicsView(QGraphicsScene*, QWidget* parent = nullptr);
+    GraphicsView(QGraphicsScene*, QWidget* parent);
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;

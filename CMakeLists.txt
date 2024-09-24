@@ -20,6 +20,9 @@ set(PROJECT_SOURCES
         mainwindow.h
         Rectangle.cpp
         Rectangle.hpp
+        Component.hpp
+        Resistor.hpp
+        Wire.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
