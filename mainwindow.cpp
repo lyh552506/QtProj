@@ -1,47 +1,10 @@
 #include "mainwindow.h"
-#include <qevent.h>
 
-GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr)
-    : QGraphicsView(scene, parent),
-      currentComponent(nullptr),
-      currentWire(nullptr),
-      isPlacingComponent(false),
-      isPlacingWire(false) {}
 
-void GraphicsView::mousePressEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) {
-    if (isPlacingComponent) {
-      // 放置元件
-      Component *newComponent = new Resistor();
-      scene()->addItem(newComponent);
-      newComponent->setPos(mapToScene(event->pos()));
-      isPlacingComponent = false;
-    } else if (isPlacingWire) {
-      // 开始放置连接线
-      if (currentWire == nullptr) {
-        currentWire = new Wire();
-        scene()->addItem(currentWire);
-        currentWire->setPos(mapToScene(event->pos()));
-      }
-    }
-  }
-}
-void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
-  if (isPlacingWire && currentWire != nullptr) {
-    currentWire->updateGeometry();
-  }
-}
-void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
-  if (isPlacingWire && currentWire != nullptr) {
-    currentWire->updateGeometry();
-    isPlacingWire = false;
-  }
-}
-void GraphicsView::placeComponent() { isPlacingComponent = true; }
-void GraphicsView::placeWire() { isPlacingWire = true; }
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-  InitToolBar();
-  InitGraph();
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent) {
+    InitToolBar();
+    InitGraph();
 }
 
 MainWindow::~MainWindow() {}
@@ -103,13 +66,14 @@ void MainWindow::InitGraph() {
 
   setCentralWidget(view);
 }
-void MainWindow::on_put_triggered() {
-  qDebug() << "Test put";
-  RectangleItem *item = new RectangleItem();
-  scene->addItem(item);
-  item->setPos(QPointF(100, 100));
-}
 
+void MainWindow::on_put_triggered() {
+    qDebug() << "Test put";
+    Resistor* item = new Resistor();
+    scene->addItem(item);
+    item->setPos(QPointF(100,100));
+    
+}
 void MainWindow::open_file_triggered() {
   qDebug() << "Open Test";
   auto file_name = QFileDialog::getOpenFileName(
@@ -123,3 +87,14 @@ void MainWindow::open_file_triggered() {
 void MainWindow::save_file_triggered() { qDebug() << "Save Test"; }
 
 void MainWindow::on_file_triggered() { qDebug() << "Test file"; }
+
+
+void MainWindow::on_Resistor_triggered() {
+    view->placeResistor();
+}
+void MainWindow::on_Capacitor_triggered() {
+    view->placeCapacitor();
+}
+void MainWindow::on_Wire_triggered() {
+    view->placeWire();
+}

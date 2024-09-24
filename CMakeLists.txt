@@ -18,9 +18,10 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        Rectangle.cpp
-        Rectangle.hpp
+        GraphicsView.cpp
+        GraphicsView.hpp
         Component.hpp
+        Component.cpp
         Resistor.hpp
         Wire.hpp
 )

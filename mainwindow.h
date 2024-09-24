@@ -1,42 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
-#include <qaction.h>
-#include <qchar.h>
+#include <QMainWindow>
 #include <QAction>
 #include <QDebug>
-#include <QFile>
-#include <QFileDialog>
-#include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsView>
-#include <QMainWindow>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QMouseEvent>
-#include <QTextStream>
 #include <QToolBar>
-#include "Component.hpp"
-#include "Rectangle.hpp"
-#include "Resistor.hpp"
-#include "Wire.hpp"
+#include <QMenu>
+#include <QMenuBar>
+#include <QFileDialog>
+#include <qaction.h>
+#include <qevent.h>
+#include <qchar.h>
+#include "GraphicsView.hpp"
 
-class GraphicsView : public QGraphicsView {
- public:
-  GraphicsView(QGraphicsScene*, QWidget* parent);
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  void placeComponent();
-  void placeWire();
-
- private:
-  Component* currentComponent;
-  Wire* currentWire;
-  bool isPlacingComponent;
-  bool isPlacingWire;
-};
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -69,12 +44,15 @@ class MainWindow : public QMainWindow {
   QAction* file;
 
   QGraphicsScene* scene;
-  QGraphicsView* view;
+  GraphicsView* view;
 
   QString current_file;
  private slots:
   void on_put_triggered();
   void on_file_triggered();
+  void on_Resistor_triggered();
+  void on_Capacitor_triggered();
+  void on_Wire_triggered();
   void open_file_triggered();
   void save_file_triggered();
 };
