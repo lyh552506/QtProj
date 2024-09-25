@@ -24,15 +24,20 @@ public:
     void placeResistor();
     void placeCapacitor();
     void placeWire();
+
+    void zoomIn();
+    void zoomOut();
+    void resetZoom();
+    void wheelEvent(QWheelEvent *event);
 private:
     Component *currentComponent;
     Wire *currentWire;
     bool isPlacingComponent;
     bool isPlacingWire;
     componentType elementType;
+    qreal m_zoomFactor;
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    // void selectComponent(Component*);
 };

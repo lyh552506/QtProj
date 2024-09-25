@@ -86,6 +86,27 @@ void GraphicsView::placeWire() {
     isPlacingWire = true;
 }
 
-// void GraphicsView::selectComponent(Component* component) {
-//     component->setSelected(true);
-// }
+void GraphicsView::zoomIn() {
+    m_zoomFactor *= 1.2;
+    scale(1.2, 1.2);
+}
+
+void GraphicsView::zoomOut() {
+    m_zoomFactor /= 1.2;
+    scale(1.0 / 1.2, 1.0 / 1.2);
+}
+
+void GraphicsView::resetZoom() {
+    m_zoomFactor = 1.0;
+    resetTransform();
+}
+
+void GraphicsView::wheelEvent(QWheelEvent *event)
+{
+    if (event->angleDelta().y() > 0) {
+        zoomIn();
+    } else {
+        zoomOut();
+    }
+    QGraphicsView::wheelEvent(event);
+}
