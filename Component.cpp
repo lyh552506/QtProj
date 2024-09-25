@@ -1,6 +1,6 @@
 #include "Component.hpp"
 #include "GraphicsView.hpp"
-Component::Component(QGraphicsItem *parent = nullptr) : 
+Component::Component(QGraphicsItem *parent) : 
     QGraphicsItem(parent),  m_selected(false){
         rectf = boundingRect();
 }
