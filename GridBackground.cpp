@@ -4,7 +4,7 @@
 GridBackground::GridBackground(QGraphicsScene *scene, int gridSize)
     : QGraphicsRectItem(scene->sceneRect()), gridSize(gridSize) {
     setZValue(-1000); // 确保网格在所有其他项之下
-}
+}   
 
 void GridBackground::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     QPen gridPen(Qt::lightGray, 1, Qt::DotLine);

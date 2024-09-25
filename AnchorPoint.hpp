@@ -1,28 +1,25 @@
-
 #pragma once
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsScene>
-#include "AnchorPoint.hpp"
-class Component : public QGraphicsItem {
-public:
-    Component(QGraphicsItem *parent);
 
+class AnchorPoint : public QGraphicsItem {
+public:
+    AnchorPoint(QGraphicsItem *parent = nullptr);
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    virtual void paint(QPainter *painter, 
-               const QStyleOptionGraphicsItem *option, 
-               QWidget *widget) {}
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void setPos(const QPointF &pos) override;
+    QPointF pos() const override { return m_pos; }
     void setSelected(bool selected);
-    inline bool isSelected() const {return m_selected;}
-    QRectF rectf;
-    QPointF m_lastPos;
-    bool m_selected;
+    bool isSelected() const { return m_selected; }
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
 private:
-    QList<AnchorPoint*> m_anchorPoints;
+    QPointF m_pos;
+    bool m_selected;
 };

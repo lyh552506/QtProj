@@ -55,8 +55,5 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    // if (event->button() == Qt::LeftButton) {
-    //     setSelected(false);
-    //     update();
-    // }
+
 }

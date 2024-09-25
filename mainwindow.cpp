@@ -89,7 +89,7 @@ void MainWindow::open_file_triggered() {
       while (!in.atEnd()) {
         componentType ty;
         QPointF pos;
-        in >> ty;
+        // in >> ty;
         in >> pos;
         if (ty == _Resistor) {
           Resistor *resistor = new Resistor();

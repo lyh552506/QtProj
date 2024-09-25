@@ -21,9 +21,11 @@ set(PROJECT_SOURCES
         GraphicsView.cpp
         GraphicsView.hpp
         GridBackground.cpp
-        GridBackground.hpp 
-        Component.hpp
+        GridBackground.hpp
         Component.cpp
+        Component.hpp
+        AnchorPoint.cpp
+        AnchorPoint.hpp 
         Resistor.hpp
         Wire.hpp
 )
