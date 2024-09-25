@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QScrollBar>
 #include "GridBackground.hpp"
 #include "Component.hpp"
 #include "Wire.hpp"
@@ -25,17 +26,25 @@ public:
     void placeCapacitor();
     void placeWire();
 
+    void changemode();
+
     void zoomIn();
     void zoomOut();
     void resetZoom();
     void wheelEvent(QWheelEvent *event);
 private:
+    // component
     Component *currentComponent;
     Wire *currentWire;
     bool isPlacingComponent;
     bool isPlacingWire;
     componentType elementType;
+    // zoom
     qreal m_zoomFactor;
+    // drag
+    bool m_dragging;
+    QPoint m_lastMousePosition;
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

@@ -43,18 +43,22 @@ class MainWindow : public QMainWindow {
   QAction* put;
   QAction* file;
   QAction* action_Resistor;
+  QAction* action_DragMode;
 
   QGraphicsScene* scene;
   GraphicsView* view;
 
   QString current_file;
- private slots:
+
+private slots:
   void on_put_triggered();
   void on_file_triggered();
+  void open_file_triggered();
+  void save_file_triggered();
+  
   void on_Resistor_triggered();
   void on_Capacitor_triggered();
   void on_Wire_triggered();
-  void open_file_triggered();
-  void save_file_triggered();
+  void on_DragMode_triggered();
 };
 #endif  // MAINWINDOW_H

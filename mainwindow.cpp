@@ -20,16 +20,19 @@ void MainWindow::InitToolBar() {
   action_Open = new QAction(tr("&Open"), this);
   action_Save = new QAction(tr("&Save"), this);
   action_Resistor = new QAction(tr("&Resistor"), this);
+  action_DragMode = new QAction(tr("&Mode"), this);
 
   // add ToolBar act
   menuToolBar->addAction(actionTest_put);
   menuToolBar->addAction(actionTest_file);
+
   // add File act
   menuTest_file->addAction(action_Open);
   menuTest_file->addAction(action_Save);
 
   put = new QAction(tr("Put"), this);
   file = new QAction(tr("File"), this);
+  toolBar_put->addAction(action_DragMode);
   toolBar_put->addAction(put);
   toolBar_file->addAction(file);
   toolBar_put->addAction(action_Resistor);
@@ -42,12 +45,14 @@ void MainWindow::InitToolBar() {
   connect(action_Resistor, &QAction::triggered, this,
           &MainWindow::on_Resistor_triggered);
 
+  connect(action_DragMode, &QAction::triggered, this,
+          &MainWindow::on_DragMode_triggered);
+
   // bind open and save bar
   connect(action_Open, &QAction::triggered, this,
           &MainWindow::open_file_triggered);
   connect(action_Save, &QAction::triggered, this,
           &MainWindow::save_file_triggered);
-
   connect(put, &QAction::triggered, this, &MainWindow::on_put_triggered);
   connect(file, &QAction::triggered, this, &MainWindow::on_file_triggered);
 
@@ -64,7 +69,8 @@ void MainWindow::showToolBar(QToolBar *toolBar) {
 
 void MainWindow::InitGraph() {
   scene = new QGraphicsScene(this);
-  scene->setSceneRect(-400, -300, 400, 300);
+  scene->setSceneRect(0, 0, 800, 600);
+  // scene->setSceneRect(-400, -300, 800, 600);
   view = new GraphicsView(scene, this);
 
   setCentralWidget(view);
@@ -125,7 +131,7 @@ void MainWindow::save_file_triggered() {
 }
 
 void MainWindow::on_file_triggered() { qDebug() << "Test file"; }
-
 void MainWindow::on_Resistor_triggered() { view->placeResistor(); }
 void MainWindow::on_Capacitor_triggered() { view->placeCapacitor(); }
-void MainWindow::on_Wire_triggered() { view->placeWire(); }
+void MainWindow::on_Wire_triggered() { view->placeWire();}
+void MainWindow::on_DragMode_triggered() {view->changemode();}
