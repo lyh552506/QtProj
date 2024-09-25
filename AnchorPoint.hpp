@@ -9,8 +9,6 @@ public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    void setPos(const QPointF &pos) override;
-    QPointF pos() const override { return m_pos; }
     void setSelected(bool selected);
     bool isSelected() const { return m_selected; }
 

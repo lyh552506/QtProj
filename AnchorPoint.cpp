@@ -7,7 +7,7 @@ AnchorPoint::AnchorPoint(QGraphicsItem *parent)
 
 QRectF AnchorPoint::boundingRect() const
 {
-    return QRectF(-5, -5, 10, 10);
+    return QRectF(-3, -3, 6, 6);
 }
 
 QPainterPath AnchorPoint::shape() const
@@ -34,12 +34,6 @@ void AnchorPoint::setSelected(bool selected)
 {
     m_selected = selected;
     update();
-}
-
-void AnchorPoint::setPos(const QPointF &pos)
-{
-    m_pos = pos;
-    prepareGeometryChange();
 }
 
 void AnchorPoint::mousePressEvent(QGraphicsSceneMouseEvent *event)

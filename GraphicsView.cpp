@@ -12,11 +12,6 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr)
     scene->addItem(gridBackground);
 }
 
-void GraphicsView::snapToGrid(QPointF &pos, int gridSize) {
-    pos.setX(gridSize * round(pos.x() / gridSize));
-    pos.setY(gridSize * round(pos.y() / gridSize));
-}
-
 void GraphicsView::putComponent(Component* component, const QPointF& pos) {
     QPointF snappedPos = pos;
     snapToGrid(snappedPos, 10);

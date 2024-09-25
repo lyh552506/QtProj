@@ -1,6 +1,9 @@
 #include "GridBackground.hpp"
 #include <QPainter>
-
+void snapToGrid(QPointF &pos, int gridSize) {
+    pos.setX(gridSize * round(pos.x() / gridSize));
+    pos.setY(gridSize * round(pos.y() / gridSize));
+}
 GridBackground::GridBackground(QGraphicsScene *scene, int gridSize)
     : QGraphicsRectItem(scene->sceneRect()), gridSize(gridSize) {
     setZValue(-1000); // 确保网格在所有其他项之下

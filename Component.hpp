@@ -19,6 +19,11 @@ public:
     QRectF rectf;
     QPointF m_lastPos;
     bool m_selected;
+
+    void addAnchorPoint(QPointF pos);
+    void removeAnchorPoint(AnchorPoint *point);
+    void clearAnchorPoints();
+    
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
