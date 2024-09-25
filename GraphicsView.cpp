@@ -13,7 +13,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event) {
                 Component *newComponent = new Resistor();
                 scene()->addItem(newComponent);
                 newComponent->setPos(mapToScene(event->pos()));
-                isPlacingComponent = false;
+                currentComponent = newComponent;
             }
             else if (elementType == _Capacitor) {
                 
@@ -21,6 +21,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event) {
             else {
                 // _None
             }
+            isPlacingComponent = false;
         } else if (isPlacingWire) {
             // put wire
             if (currentWire == nullptr) {
@@ -28,29 +29,43 @@ void GraphicsView::mousePressEvent(QMouseEvent *event) {
                 scene()->addItem(currentWire);
                 currentWire->setPos(mapToScene(event->pos()));
             }
+            isPlacingWire = false;
         } else {
             // selecte a component
-            QPointF pos = event->pos(); 
-            QList<QGraphicsItem *> items = scene()->items(pos);
-            if (!items.isEmpty()) {
-                Component *component = qgraphicsitem_cast<Component *>(items.first());
-                if (component) {
-                    component->setSelected(true);
-                }
-            }
+            QGraphicsView::mousePressEvent(event);
+
+            // QPointF scenePos = mapToScene(event->pos());
+            // QList<QGraphicsItem *> items = scene()->items(scenePos);
+
+            // if (!items.isEmpty()) {
+            //     Component *component = qgraphicsitem_cast<Component *>(items.first());
+            //     if (component) {
+            //         // 取消其他 Component 的选择状态
+            //         for (QGraphicsItem *item : scene()->items()) {
+            //             Component *comp = qgraphicsitem_cast<Component *>(item);
+            //             if (comp && comp != component) {
+            //                 comp->setSelected(false);
+            //             }
+            //         }
+            //         component->setSelected(true);
+            //         currentComponent = component;
+            //     }
+            // }
         }
     }
 }
 void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
-    if (isPlacingWire && currentWire != nullptr) {
-        currentWire->updateGeometry();
-    }
+    QGraphicsView::mouseMoveEvent(event);
+    // if (isPlacingWire && currentWire != nullptr) {
+    //     currentWire->updateGeometry();
+    // }
 }
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
-    if (isPlacingWire && currentWire != nullptr) {
-        currentWire->updateGeometry();
-        isPlacingWire = false;
-    }
+    QGraphicsView::mouseReleaseEvent(event);
+    // if (isPlacingWire && currentWire != nullptr) {
+    //     currentWire->updateGeometry();
+    //     isPlacingWire = false;
+    // } 
 }
 void GraphicsView::placeComponent() {
     isPlacingComponent = true;
@@ -67,3 +82,4 @@ void GraphicsView::placeCapacitor() {
 void GraphicsView::placeWire() {
     isPlacingWire = true;
 }
+

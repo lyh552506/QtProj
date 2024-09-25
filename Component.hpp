@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
 class Component : public QGraphicsItem {
 public:
     Component(QGraphicsItem *parent);
@@ -14,7 +15,7 @@ public:
                QWidget *widget) = 0;
     void setSelected(bool selected);
     inline bool isSelected() const {return m_selected;}
-    QRectF rect;
+    QRectF rectf;
     QPointF m_lastPos;
     bool m_selected;
 protected:

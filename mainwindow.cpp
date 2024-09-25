@@ -21,6 +21,8 @@ void MainWindow::InitToolBar() {
   actionTest_file = new QAction(tr("&File tool"), this);
   action_Open = new QAction(tr("&Open"), this);
   action_Save = new QAction(tr("&Save"), this);
+  action_Resistor = new QAction(tr("&Resistor"), this);
+  
   // add ToolBar act
   menuToolBar->addAction(actionTest_put);
   menuToolBar->addAction(actionTest_file);
@@ -32,11 +34,16 @@ void MainWindow::InitToolBar() {
   file = new QAction(tr("File"), this);
   toolBar_put->addAction(put);
   toolBar_file->addAction(file);
+  toolBar_put->addAction(action_Resistor);
   // bind Put and File bar
   connect(actionTest_put, &QAction::triggered, this,
           [=]() { this->showToolBar(toolBar_put); });
   connect(actionTest_file, &QAction::triggered, this,
           [=]() { this->showToolBar(toolBar_file); });
+          
+  connect(action_Resistor, &QAction::triggered, this,
+          &MainWindow::on_Resistor_triggered);
+          
   // bind open and save bar
   connect(action_Open, &QAction::triggered, this,
           &MainWindow::open_file_triggered);
@@ -59,7 +66,7 @@ void MainWindow::showToolBar(QToolBar *toolBar) {
 
 void MainWindow::InitGraph() {
   scene = new QGraphicsScene(this);
-  scene->setSceneRect(-100, -100, 400, 400);
+  scene->setSceneRect(-400, -300, 400, 300);
   view = new GraphicsView(scene, this);
   view->setRenderHint(QPainter::Antialiasing);
   view->setFixedSize(800, 600);

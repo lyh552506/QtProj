@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow {
   QAction* action_Save;
   QAction* put;
   QAction* file;
+  QAction* action_Resistor;
 
   QGraphicsScene* scene;
   GraphicsView* view;
