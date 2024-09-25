@@ -1,5 +1,5 @@
 #include "Component.hpp"
-
+#include "GraphicsView.hpp"
 Component::Component(QGraphicsItem *parent = nullptr) : 
     QGraphicsItem(parent),  m_selected(false){
         rectf = boundingRect();
@@ -25,18 +25,11 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (event->button() == Qt::LeftButton) {
         setSelected(true);
         m_lastPos = event->scenePos();
-        // QList<QGraphicsItem *> items = scene()->items(m_lastPos);
-        // if (!items.isEmpty()) {
-        //     Component *component = qgraphicsitem_cast<Component *>(items.first());
-        //     if (component) {
-        //         for (QGraphicsItem *item : items) {
-        //             Component *comp = qgraphicsitem_cast<Component *>(item);
-        //             if (comp && comp != component) {
-        //                 comp->setSelected(false);
-        //             }
-        //         }
-        //     }
-        // }
+        for (auto view : scene()->views()) {
+            if (GraphicsView* gview = qobject_cast<GraphicsView*>(view)) {
+                gview->currentComponent = this;
+            }
+        }
     }
 
 }

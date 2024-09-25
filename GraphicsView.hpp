@@ -17,6 +17,7 @@ enum componentType {
 class GraphicsView : public QGraphicsView {
     Q_OBJECT
 public:
+    friend class Component;
     GraphicsView(QGraphicsScene*, QWidget* parent);
     void placeComponent();
     void placeResistor();
@@ -32,4 +33,5 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    // void selectComponent(Component*);
 };

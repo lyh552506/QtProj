@@ -31,26 +31,12 @@ void GraphicsView::mousePressEvent(QMouseEvent *event) {
             }
             isPlacingWire = false;
         } else {
-            // selecte a component
+            if(currentComponent!=nullptr)
+                currentComponent->setSelected(false);
+            currentComponent = nullptr;
+            currentWire = nullptr;
             QGraphicsView::mousePressEvent(event);
 
-            // QPointF scenePos = mapToScene(event->pos());
-            // QList<QGraphicsItem *> items = scene()->items(scenePos);
-
-            // if (!items.isEmpty()) {
-            //     Component *component = qgraphicsitem_cast<Component *>(items.first());
-            //     if (component) {
-            //         // 取消其他 Component 的选择状态
-            //         for (QGraphicsItem *item : scene()->items()) {
-            //             Component *comp = qgraphicsitem_cast<Component *>(item);
-            //             if (comp && comp != component) {
-            //                 comp->setSelected(false);
-            //             }
-            //         }
-            //         component->setSelected(true);
-            //         currentComponent = component;
-            //     }
-            // }
         }
     }
 }
@@ -83,3 +69,6 @@ void GraphicsView::placeWire() {
     isPlacingWire = true;
 }
 
+// void GraphicsView::selectComponent(Component* component) {
+//     component->setSelected(true);
+// }
