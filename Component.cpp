@@ -5,7 +5,7 @@ Component::Component(QGraphicsItem *parent = nullptr) :
         rectf = boundingRect();
 }
 QRectF Component::boundingRect() const{
-    return QRectF(0, 0, 50, 25);
+    return QRectF(0, 0, 50, 20);
 } 
 
 QPainterPath Component::shape() const {
@@ -23,11 +23,12 @@ void Component::setSelected(bool selected)
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        setSelected(true);
         m_lastPos = event->scenePos();
         for (auto view : scene()->views()) {
             if (GraphicsView* gview = qobject_cast<GraphicsView*>(view)) {
                 gview->currentComponent = this;
+                setSelected(true);
+                break;
             }
         }
     }
@@ -39,7 +40,14 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (m_selected) {
         QPointF newPos = event->scenePos();
         QPointF delta = newPos - m_lastPos;
-        setPos(pos() + delta);
+        // setPos(pos() + delta);
+        for (auto view : scene()->views()) {
+            if (GraphicsView* gview = qobject_cast<GraphicsView*>(view)) {
+                gview->snapToGrid(delta, 10);
+                setPos(pos() + delta);
+                break;
+            }
+        }
         m_lastPos = newPos;
         update();
     }

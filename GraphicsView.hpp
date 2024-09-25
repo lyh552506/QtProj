@@ -4,7 +4,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
-#include "Rectangle.hpp"
+#include <cmath>
+#include "GridBackground.hpp"
 #include "Component.hpp"
 #include "Wire.hpp"
 #include "Resistor.hpp"
@@ -19,6 +20,8 @@ class GraphicsView : public QGraphicsView {
 public:
     friend class Component;
     GraphicsView(QGraphicsScene*, QWidget* parent);
+    void snapToGrid(QPointF&, int);
+    void putComponent(Component*, const QPointF&);
     void placeComponent();
     void placeResistor();
     void placeCapacitor();

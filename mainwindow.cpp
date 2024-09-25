@@ -68,8 +68,6 @@ void MainWindow::InitGraph() {
   scene = new QGraphicsScene(this);
   scene->setSceneRect(-400, -300, 400, 300);
   view = new GraphicsView(scene, this);
-  view->setRenderHint(QPainter::Antialiasing);
-  view->setFixedSize(800, 600);
 
   setCentralWidget(view);
 }

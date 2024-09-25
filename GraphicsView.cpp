@@ -3,16 +3,37 @@
 GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr)
     : QGraphicsView(scene, parent), currentComponent(nullptr),
     currentWire(nullptr), isPlacingComponent(false), 
-    isPlacingWire(false), elementType(componentType::_None) {}
+    isPlacingWire(false), elementType(componentType::_None) {
+    
+    setRenderHint(QPainter::Antialiasing);
+    setFixedSize(800, 600);
+
+    GridBackground *gridBackground = new GridBackground(scene, 10);
+    scene->addItem(gridBackground);
+}
+
+void GraphicsView::snapToGrid(QPointF &pos, int gridSize) {
+    pos.setX(gridSize * round(pos.x() / gridSize));
+    pos.setY(gridSize * round(pos.y() / gridSize));
+}
+
+void GraphicsView::putComponent(Component* component, const QPointF& pos) {
+    QPointF snappedPos = pos;
+    snapToGrid(snappedPos, 10);
+    component->setPos(snappedPos);
+    scene()->addItem(component);
+}
 
 void GraphicsView::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         if (isPlacingComponent) {
+            if(currentComponent!=nullptr)
+                currentComponent->setSelected(false);
             // put conponent
             if(elementType == _Resistor) {  
                 Component *newComponent = new Resistor();
                 scene()->addItem(newComponent);
-                newComponent->setPos(mapToScene(event->pos()));
+                putComponent(newComponent, mapToScene(event->pos()));
                 currentComponent = newComponent;
             }
             else if (elementType == _Capacitor) {
@@ -21,6 +42,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event) {
             else {
                 // _None
             }
+
             isPlacingComponent = false;
         } else if (isPlacingWire) {
             // put wire

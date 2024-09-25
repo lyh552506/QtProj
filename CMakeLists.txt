@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         mainwindow.h
         GraphicsView.cpp
         GraphicsView.hpp
+        GridBackground.cpp
+        GridBackground.hpp 
         Component.hpp
         Component.cpp
         Resistor.hpp
