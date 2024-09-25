@@ -1,5 +1,26 @@
 #include "mainwindow.h"
 
+template <>
+QMenu *MainWindow::get<QMenu>(std::string name) {
+  if (Menus.find(name) == Menus.end())
+    Menus[name] = menuBar()->addMenu(QString::fromStdString(name));
+  return Menus[name];
+}
+
+template <>
+QToolBar *MainWindow::get<QToolBar>(std::string name) {
+  if (ToolBars.find(name) == ToolBars.end())
+    ToolBars[name] = new QToolBar(QString::fromStdString(name),this);
+  return ToolBars[name];
+}
+
+template <>
+QAction *MainWindow::get<QAction>(std::string name) {
+  if (Actions.find(name) == Actions.end())
+    Actions[name] = new QAction(QString::fromStdString(name),this);
+  return Actions[name];
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   InitToolBar();
   InitGraph();
@@ -8,52 +29,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 MainWindow::~MainWindow() {}
 
 void MainWindow::InitToolBar() {
-  menuToolBar = menuBar()->addMenu(tr("&ToolBar"));
-  menuTest_put = menuBar()->addMenu(tr("&Put"));
-  menuTest_file = menuBar()->addMenu(tr("&File"));
+  // clang-format off
+  addActionShowToolBar<QMenu>("ToolBar","Put tool","Put");
+    addActionWith<QToolBar>("Put","Put",&MainWindow::on_put_triggered);
+    addActionWith<QToolBar>("Put","Resistor",&MainWindow::on_Resistor_triggered);
+  
+  addActionShowToolBar<QMenu>("ToolBar","File tool","File");
+    addActionWith<QToolBar>("File","File",&MainWindow::on_file_triggered);
+  
+  addActionWith<QMenu>("File","Open",&MainWindow::open_file_triggered);
+  addActionWith<QMenu>("File","Save",&MainWindow::save_file_triggered);
+  // clang-format on
 
-  toolBar_put = new QToolBar(tr("&put"), this);
-  toolBar_file = new QToolBar(tr("&file"), this);
-
-  actionTest_put = new QAction(tr("&Put tool"), this);
-  actionTest_file = new QAction(tr("&File tool"), this);
-  action_Open = new QAction(tr("&Open"), this);
-  action_Save = new QAction(tr("&Save"), this);
-  action_Resistor = new QAction(tr("&Resistor"), this);
-
-  // add ToolBar act
-  menuToolBar->addAction(actionTest_put);
-  menuToolBar->addAction(actionTest_file);
-  // add File act
-  menuTest_file->addAction(action_Open);
-  menuTest_file->addAction(action_Save);
-
-  put = new QAction(tr("Put"), this);
-  file = new QAction(tr("File"), this);
-  toolBar_put->addAction(put);
-  toolBar_file->addAction(file);
-  toolBar_put->addAction(action_Resistor);
-  // bind Put and File bar
-  connect(actionTest_put, &QAction::triggered, this,
-          [=]() { this->showToolBar(toolBar_put); });
-  connect(actionTest_file, &QAction::triggered, this,
-          [=]() { this->showToolBar(toolBar_file); });
-
-  connect(action_Resistor, &QAction::triggered, this,
-          &MainWindow::on_Resistor_triggered);
-
-  // bind open and save bar
-  connect(action_Open, &QAction::triggered, this,
-          &MainWindow::open_file_triggered);
-  connect(action_Save, &QAction::triggered, this,
-          &MainWindow::save_file_triggered);
-
-  connect(put, &QAction::triggered, this, &MainWindow::on_put_triggered);
-  connect(file, &QAction::triggered, this, &MainWindow::on_file_triggered);
-
-  this->addToolBar(Qt::LeftToolBarArea, toolBar_put);
-  this->addToolBar(Qt::LeftToolBarArea, toolBar_file);
-
+  this->addToolBar(Qt::LeftToolBarArea, get<QToolBar>("Put"));
+  this->addToolBar(Qt::LeftToolBarArea, get<QToolBar>("File"));
+  
   resize(1000, 800);
 }
 void MainWindow::showToolBar(QToolBar *toolBar) {

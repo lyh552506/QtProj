@@ -26,23 +26,33 @@ class MainWindow : public QMainWindow {
   void InitGraph();
 
  private:
-  // QMenuBar* menuBar;
-  QMenu* menuToolBar;
-  QMenu* menuTest_put;
-  QMenu* menuTest_file;
+  std::unordered_map<std::string,QMenu*> Menus;
+  std::unordered_map<std::string,QToolBar*> ToolBars;
+  std::unordered_map<std::string,QAction*> Actions;
+  template <typename T>
+  T* get(std::string);
+  
+  template <typename T>
+  void addAction(std::string Tname, std::string ActionName){
+    auto action = get<QAction>(ActionName);
+    get<T>(Tname)->addAction(action);
+  }
 
-  QToolBar* toolBar;
-  QToolBar* toolBar_put;
-  QToolBar* toolBar_file;
+  template <typename T>
+  void addActionWith(std::string Tname,std::string ActionName,void (MainWindow::*&&slot)()){
+    auto action = get<QAction>(ActionName);
+    connect(action,&QAction::triggered,this,slot);
+    get<T>(Tname)->addAction(action);
+  }
 
-  QAction* actionTest;
-  QAction* actionTest_put;
-  QAction* actionTest_file;
-  QAction* action_Open;
-  QAction* action_Save;
-  QAction* put;
-  QAction* file;
-  QAction* action_Resistor;
+  template <typename T>
+  void addActionShowToolBar(std::string Tname,std::string ActionName,std::string ToolBarName){
+    auto action = get<QAction>(ActionName);
+    get<T>(Tname)->addAction(action);
+    connect(action,&QAction::triggered,this,[=](){
+      showToolBar(get<QToolBar>(ToolBarName));
+    });
+  }
 
   QGraphicsScene* scene;
   GraphicsView* view;
