@@ -30,17 +30,16 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::InitToolBar() {
   // clang-format off
-  addActionShowToolBar<QMenu>("ToolBar","Put tool","Put");
+  this->addToolBar(Qt::TopToolBarArea, get<QToolBar>("ToolBar"));
+  addActionShowToolBar<QToolBar>("ToolBar","Put tool","Put");
     addActionWith<QToolBar>("Put","Mode",&MainWindow::on_DragMode_triggered);
     addActionWith<QToolBar>("Put","Resistor",&MainWindow::on_Resistor_triggered);
     addActionWith<QToolBar>("Put","Wire",&MainWindow::on_Wire_triggered);
   
-  addActionShowToolBar<QMenu>("ToolBar","File tool","File");
-    addActionWith<QToolBar>("File","File",&MainWindow::on_file_triggered);
+  addActionShowToolBar<QToolBar>("ToolBar","File tool","File");
+    addActionWith<QToolBar>("File","Open",&MainWindow::open_file_triggered);
+    addActionWith<QToolBar>("File","Save",&MainWindow::save_file_triggered);
     get<QToolBar>("File")->setVisible(false);
-  
-  addActionWith<QMenu>("File","Open",&MainWindow::open_file_triggered);
-  addActionWith<QMenu>("File","Save",&MainWindow::save_file_triggered);
   
   this->addToolBar(Qt::LeftToolBarArea, get<QToolBar>("Put"));
   this->addToolBar(Qt::LeftToolBarArea, get<QToolBar>("File"));
@@ -49,7 +48,8 @@ void MainWindow::InitToolBar() {
 }
 void MainWindow::showToolBar(QToolBar *toolBar) {
   foreach (QToolBar *bar, findChildren<QToolBar *>()) {
-    bar->setVisible(bar == toolBar);
+    if(toolBarArea(bar) != Qt::TopToolBarArea)
+      bar->setVisible(bar == toolBar);
   }
 }
 

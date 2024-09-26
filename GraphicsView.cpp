@@ -131,7 +131,7 @@ void GraphicsView::resetZoom() {
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)  {
-    QPoint pos = event->pos();
+    QPoint pos = event->position().toPoint();
     QPointF scenePos = mapToScene(pos);
     QPointF center = mapFromScene(scenePos);
     if (event->angleDelta().y() > 0) {
