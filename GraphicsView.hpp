@@ -8,6 +8,7 @@
 #include "GridBackground.hpp"
 #include "Component.hpp"
 #include "Wire.hpp"
+#include "AnchorPoint.hpp"
 #include "Resistor.hpp"
 
 enum componentType {
@@ -20,7 +21,10 @@ class GraphicsView : public QGraphicsView {
 public:
     friend class Component;
     GraphicsView(QGraphicsScene*, QWidget* parent);
-    void putComponent(Component*, const QPointF&);
+    
+    template <typename T>
+    void putElement(T*, const QPointF&);
+
     void placeComponent();
     void placeResistor();
     void placeCapacitor();
@@ -36,8 +40,10 @@ private:
     // component
     Component *currentComponent;
     Wire *currentWire;
+    AnchorPoint *currentAnchorPoint;
     bool isPlacingComponent;
     bool isPlacingWire;
+    bool isPlacingAnchorPoint;
     componentType elementType;
     // zoom
     qreal m_zoomFactor;

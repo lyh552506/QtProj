@@ -1,31 +1,26 @@
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
-
+#include <QMouseEvent>
+#include <QDebug>
+#include <QPainter>
+#include "AnchorPoint.hpp"
+#include "GridBackground.hpp"
 class Wire : public QGraphicsLineItem {
 public:
-    Wire(QGraphicsItem *parent = nullptr) : QGraphicsLineItem(parent) {}
+    Wire(QPointF, QGraphicsItem *parent = nullptr);
+    void PressEvent(QPointF);
+    void MoveEvent(QPointF);
+    void ReleaseEvent(QPointF);
+protected:
+    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
+    QRectF boundingRect() const override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void updateGeometry();
 
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override {
-        Q_UNUSED(event)
-        start = mapToScene(event->pos());
-    }
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override {
-        Q_UNUSED(event)
-        end = mapToScene(event->pos());
-        prepareGeometryChange();
-    }
-
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override {
-        Q_UNUSED(event)
-        end = mapToScene(event->pos());
-        prepareGeometryChange();
-    }
-
-    void updateGeometry() {
-        setLine(start.x(), start.y(), end.x(), end.y());
-    }
 
 private:
-    QPointF start, end;
+    AnchorPoint *anchor_start, *anchor_end;
+    QList<QPointF> pointList;
 };

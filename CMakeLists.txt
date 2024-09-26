@@ -28,6 +28,7 @@ set(PROJECT_SOURCES
         AnchorPoint.hpp 
         Resistor.hpp
         Wire.hpp
+        Wire.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
