@@ -12,7 +12,7 @@
 #include <qchar.h>
 #include <unordered_map>
 #include "GraphicsView.hpp"
-
+#include "FileSys.hpp"
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -58,12 +58,12 @@ class MainWindow : public QMainWindow {
   QGraphicsScene* scene;
   GraphicsView* view;
   QString current_file;
-
+  FileSystem* file_sys;
 private slots:
   void open_file_triggered();
   void save_file_triggered();
   void on_file_triggered();
-  
+  void onOpenProjClicked();
   void on_Resistor_triggered();
   void on_Capacitor_triggered();
   void on_Wire_triggered();

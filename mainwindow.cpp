@@ -1,5 +1,12 @@
 #include "mainwindow.h"
 
+#include <qchar.h>
+#include <qdir.h>
+#include <qmenu.h>
+
+#include "FileSys.hpp"
+
+
 template <>
 QMenu *MainWindow::get<QMenu>(std::string name) {
   if (Menus.find(name) == Menus.end())
@@ -10,18 +17,19 @@ QMenu *MainWindow::get<QMenu>(std::string name) {
 template <>
 QToolBar *MainWindow::get<QToolBar>(std::string name) {
   if (ToolBars.find(name) == ToolBars.end())
-    ToolBars[name] = new QToolBar(QString::fromStdString(name),this);
+    ToolBars[name] = new QToolBar(QString::fromStdString(name), this);
   return ToolBars[name];
 }
 
 template <>
 QAction *MainWindow::get<QAction>(std::string name) {
   if (Actions.find(name) == Actions.end())
-    Actions[name] = new QAction(QString::fromStdString(name),this);
+    Actions[name] = new QAction(QString::fromStdString(name), this);
   return Actions[name];
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+  file_sys = new FileSystem();
   InitToolBar();
   InitGraph();
 }
@@ -39,7 +47,7 @@ void MainWindow::InitToolBar() {
     addActionWith<QToolBar>("File","File",&MainWindow::on_file_triggered);
     get<QToolBar>("File")->setVisible(false);
   
-  addActionWith<QMenu>("File","Open",&MainWindow::open_file_triggered);
+  addActionWith<QMenu>("File","Open",&MainWindow::onOpenProjClicked);
   addActionWith<QMenu>("File","Save",&MainWindow::save_file_triggered);
   
   this->addToolBar(Qt::LeftToolBarArea, get<QToolBar>("Put"));
@@ -108,8 +116,17 @@ void MainWindow::save_file_triggered() {
   }
 }
 
+void MainWindow::onOpenProjClicked() {
+  auto dir_name = QFileDialog::getExistingDirectory(
+      this, tr("Open Directory"), "",
+      QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+  if (!dir_name.isEmpty()) {
+    file_sys->OpenProj(dir_name);
+  }
+}
+
 void MainWindow::on_file_triggered() { qDebug() << "Test file"; }
 void MainWindow::on_Resistor_triggered() { view->placeResistor(); }
 void MainWindow::on_Capacitor_triggered() { view->placeCapacitor(); }
-void MainWindow::on_Wire_triggered() { view->placeWire();}
-void MainWindow::on_DragMode_triggered() {view->changemode();}
+void MainWindow::on_Wire_triggered() { view->placeWire(); }
+void MainWindow::on_DragMode_triggered() { view->changemode(); }
