@@ -19,7 +19,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateGeometry();
 
-
 private:
     AnchorPoint *anchor_start, *anchor_end;
     QList<QPointF> pointList;
