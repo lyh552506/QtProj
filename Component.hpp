@@ -4,11 +4,11 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
+#include <unordered_map>
 #include "AnchorPoint.hpp"
 class Component : public QGraphicsItem {
 public:
     Component(QGraphicsItem *parent);
-
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     virtual void paint(QPainter *painter, 
@@ -17,6 +17,7 @@ public:
     void setSelected(bool selected);
     inline bool isSelected() const {return m_selected;}
     inline QList<AnchorPoint*>& getPoints() {return m_anchorPoints;}
+    void setAnchorPos();
 
     QRectF rectf;
     QPointF m_lastPos;
@@ -33,4 +34,5 @@ protected:
 
 private:
     QList<AnchorPoint*> m_anchorPoints;
+    void move(QPointF);
 };

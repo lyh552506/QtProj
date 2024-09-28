@@ -44,7 +44,28 @@ void GraphicsView::putComponent_(componentType elementType, QMouseEvent* event) 
     }
     if(newComponent)
         putComponent(newComponent, mapToScene(event->pos()));
+    newComponent->setAnchorPos();
     isPlacingComponent = false;
+}
+
+AnchorPoint* GraphicsView::findAnchorPoint(const QPointF& pos) {
+    QPointF gridPos = pos;
+    snapToGrid(gridPos, 10);
+    QRectF rect(gridPos.x()-2, gridPos.y()-2, 4,4);
+    for (QGraphicsItem *item : scene()->items(rect)) {
+        if (auto component = dynamic_cast<Component*>(item)) {
+            QPointF componentPos = component->pos();
+            for(auto& anchor: component->getPoints()) {
+                if(anchor==nullptr) continue;
+                QPointF anchorPos = anchor->pos();
+                anchorPos+=componentPos;
+                if(anchorPos.x()==gridPos.x() && anchorPos.y()==gridPos.y()) {
+                    return anchor;
+                }
+            }
+        }
+    }
+    return nullptr;
 }
 
 void GraphicsView::putWire(QMouseEvent *event) {
@@ -54,11 +75,9 @@ void GraphicsView::putWire(QMouseEvent *event) {
     scene()->addItem(newWire);
     newWire->PressEvent(mapToScene(event->pos()));
     currentWire = newWire;
-    // AnchorPoint* nearAnchor = findNearestAnchorPoint(pos);
-    // qDebug() << "Anchor pos" << nearAnchor->pos();
-    // qDebug() << "Wirestart pos" << newWire->getStartPoint();
-    // if(nearAnchor && nearAnchor->pos()==newWire->getStartPoint()) 
-    //     newWire->setStartAnchor(nearAnchor);
+    AnchorPoint* Anchor = findAnchorPoint(pos);
+    if(Anchor) 
+        newWire->setStartAnchor(Anchor);
 }
 
 void GraphicsView::mousePressEvent(QMouseEvent *event) {
@@ -92,8 +111,6 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
     } else if (isPlacingWire) { 
         if(currentWire != nullptr)
             currentWire->MoveEvent(mapToScene(event->pos()));
-            // AnchorPoint* nearAnchor = findNearestAnchorPoint(pos);
-            // if(nearAnchor) currentWire->setStartAnchor(nearAnchor);
     }
     else {
         QGraphicsView::mouseMoveEvent(event);
@@ -105,7 +122,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     }
     else if (isPlacingWire) {
         currentWire->ReleaseEvent(mapToScene(event->pos()));
-        AnchorPoint* nearAnchor = findNearestAnchorPoint(mapToScene(event->pos()));
+        AnchorPoint* nearAnchor = findAnchorPoint(mapToScene(event->pos()));
         if(nearAnchor && nearAnchor->pos()==currentWire->getEndPoint()) 
             currentWire->setEndAnchor(nearAnchor);
         isPlacingWire = false;
@@ -162,17 +179,4 @@ void GraphicsView::wheelEvent(QWheelEvent *event)  {
     QGraphicsView::wheelEvent(event);
 }
 
-AnchorPoint* GraphicsView::findNearestAnchorPoint(const QPointF& pos) {
-    double minDistance = std::numeric_limits<double>::max();
-    AnchorPoint *nearestAnchor = nullptr;
-    for (QGraphicsItem *item : scene()->items()) {
-        if (auto anchor = qgraphicsitem_cast<AnchorPoint *>(item)) {
-            double distance = (pos - anchor->pos()).manhattanLength();
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestAnchor = anchor;
-            }
-        }
-    }
-    return nearestAnchor;
-}
+

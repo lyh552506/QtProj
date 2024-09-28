@@ -28,6 +28,6 @@ protected:
     void updateGeometry();
 
 private:
-    AnchorPoint *anchor_start, *anchor_end;
+    AnchorPoint *anchor_start, *anchor_end; 
     QList<QPointF> pointList;
 };

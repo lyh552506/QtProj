@@ -49,7 +49,7 @@ private:
     bool m_dragging;
     QPoint m_lastMousePosition;
 
-    AnchorPoint* findNearestAnchorPoint(const QPointF &);
+    AnchorPoint* findAnchorPoint(const QPointF &);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

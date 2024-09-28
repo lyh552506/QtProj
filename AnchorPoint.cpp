@@ -1,13 +1,15 @@
 #include "AnchorPoint.hpp"
 
-AnchorPoint::AnchorPoint(QGraphicsItem *parent)
-    : QObject(), QGraphicsItem(parent), m_selected(false) {
+AnchorPoint::AnchorPoint(QGraphicsItem* m_parent, QGraphicsItem *parent)
+    : QObject(), QGraphicsItem(parent), m_selected(false),
+    m_parent(m_parent) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
-AnchorPoint::AnchorPoint(QPointF pos, QGraphicsItem *parent)
-    : QObject(), QGraphicsItem(parent), m_selected(false) {
-    this->setPos(pos);
+AnchorPoint::AnchorPoint(QPointF pos_, QGraphicsItem* m_parent, QGraphicsItem *parent)
+    : QObject(), QGraphicsItem(parent), m_selected(false),
+    m_parent(m_parent) {
+    this->setPos(pos_);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
@@ -44,20 +46,12 @@ void AnchorPoint::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         setSelected(true);
         update();
     }
-    QGraphicsItem::mousePressEvent(event);
 }
 
 void AnchorPoint::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if (isSelected()) {
-        setPos(mapToParent(event->pos()));
-    }
-    QGraphicsItem::mouseMoveEvent(event);
+
 }
 
 void AnchorPoint::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    // if (event->button() == Qt::LeftButton) {
-    //     setSelected(false);
-    //     update();
-    // }
-    // QGraphicsItem::mouseReleaseEvent(event);
+
 }
