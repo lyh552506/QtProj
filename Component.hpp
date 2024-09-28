@@ -16,6 +16,8 @@ public:
                QWidget *widget) {}
     void setSelected(bool selected);
     inline bool isSelected() const {return m_selected;}
+    inline QList<AnchorPoint*>& getPoints() {return m_anchorPoints;}
+
     QRectF rectf;
     QPointF m_lastPos;
     bool m_selected;

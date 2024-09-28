@@ -23,19 +23,17 @@ public:
     GraphicsView(QGraphicsScene*, QWidget* parent);
     
     template <typename T>
-    void putElement(T*, const QPointF&);
+    void putComponent(T*, const QPointF&);
+    void putComponent_(componentType, QMouseEvent*);
+    void putWire(QMouseEvent*);
 
     void placeComponent();
     void placeResistor();
     void placeCapacitor();
     void placeWire();
-
     void changemode();
 
-    void zoomIn();
-    void zoomOut();
-    void resetZoom();
-    void wheelEvent(QWheelEvent *event);
+
 private:
     // component
     Component *currentComponent;
@@ -51,8 +49,14 @@ private:
     bool m_dragging;
     QPoint m_lastMousePosition;
 
+    AnchorPoint* findNearestAnchorPoint(const QPointF &);
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void zoomIn();
+    void zoomOut();
+    void resetZoom();
+    void wheelEvent(QWheelEvent *event);
 };

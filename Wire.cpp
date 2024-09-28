@@ -1,6 +1,6 @@
 #include "Wire.hpp"
 Wire::Wire(QPointF start, QGraphicsItem *parent) 
-    : QGraphicsLineItem() {
+    : QObject(), QGraphicsLineItem() {
     setZValue(1);
     setPen(QPen(Qt::black,2));
     pointList.append(start);
@@ -9,6 +9,7 @@ Wire::Wire(QPointF start, QGraphicsItem *parent)
 }
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    
     painter->setPen(pen());
     painter->drawLine(line());
 }
@@ -29,7 +30,6 @@ void Wire::updateGeometry() {
 }
 
 void Wire::PressEvent(QPointF pos) {
-    qDebug() << "Wire press: " << pos;
     snapToGrid(pos, 10);
     pointList.front() = pos;
     updateGeometry();
@@ -46,4 +46,18 @@ void Wire::ReleaseEvent(QPointF pos) {
     pointList.back() = pos;
     updateGeometry();
     prepareGeometryChange();
+}
+
+void Wire::setStartAnchor(AnchorPoint* start) {
+    anchor_start = start;
+    if(anchor_start) {
+        connect(anchor_start, &AnchorPoint::positionChanged, 
+                this, &Wire::updateGeometry);
+    }
+}   
+void Wire::setEndAnchor(AnchorPoint* end) {
+    if(anchor_start) {
+        connect(anchor_start, &AnchorPoint::positionChanged, 
+                this, &Wire::updateGeometry);
+    }
 }

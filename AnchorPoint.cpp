@@ -1,11 +1,15 @@
 #include "AnchorPoint.hpp"
 
 AnchorPoint::AnchorPoint(QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_selected(false) {
+    : QObject(), QGraphicsItem(parent), m_selected(false) {
+    setFlag(QGraphicsItem::ItemIsMovable);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 AnchorPoint::AnchorPoint(QPointF pos, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_selected(false) {
+    : QObject(), QGraphicsItem(parent), m_selected(false) {
     this->setPos(pos);
+    setFlag(QGraphicsItem::ItemIsMovable);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 
 QRectF AnchorPoint::boundingRect() const {

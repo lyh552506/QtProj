@@ -2,8 +2,10 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QObject>
 
-class AnchorPoint : public QGraphicsItem {
+class AnchorPoint : public QObject, public QGraphicsItem {
+    Q_OBJECT
 public:
     AnchorPoint(QGraphicsItem *parent = nullptr);
     AnchorPoint(QPointF pos, QGraphicsItem *parent = nullptr);
@@ -12,13 +14,14 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     void setSelected(bool selected);
     bool isSelected() const { return m_selected; }
-    inline QPointF getPos() const {return m_pos;}
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
+signals:
+    void positionChanged(const QPointF& pos);
+
 private:
-    QPointF m_pos;
     bool m_selected;
 };
