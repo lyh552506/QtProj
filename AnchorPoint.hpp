@@ -4,6 +4,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QObject>
 #include <QDebug>
+#include <QGraphicsView>
 
 class AnchorPoint : public QObject, public QGraphicsItem {
     Q_OBJECT

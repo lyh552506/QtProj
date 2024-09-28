@@ -16,10 +16,20 @@ enum componentType {
     _Resistor,
     _Capacitor,
 };
+enum statuType {
+    _PlaceComponent,
+    _PlaceWire,
+    _PlaceAnchorPoint,
+    // _SetDragMode,
+    _Empty,
+};
+
 class GraphicsView : public QGraphicsView {
     Q_OBJECT
 public:
     friend class Component;
+    friend class AnchorPoint;
+    friend class Wire;
     GraphicsView(QGraphicsScene*, QWidget* parent);
     
     template <typename T>
@@ -28,10 +38,10 @@ public:
     void putWire(QMouseEvent*);
 
     void placeComponent();
-    void placeResistor();
-    void placeCapacitor();
     void placeWire();
     void changemode();
+    void placeResistor();
+    void placeCapacitor();
 
 
 private:
@@ -43,6 +53,7 @@ private:
     bool isPlacingWire;
     bool isPlacingAnchorPoint;
     componentType elementType;
+    statuType statu;
     // zoom
     qreal m_zoomFactor;
     // drag
@@ -50,6 +61,9 @@ private:
     QPoint m_lastMousePosition;
 
     AnchorPoint* findAnchorPoint(const QPointF &);
+    void removeCurrent();
+    // template<typename T>
+    // void addCurrent(T);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

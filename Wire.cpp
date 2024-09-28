@@ -1,4 +1,5 @@
 #include "Wire.hpp"
+#include "GraphicsView.hpp"
 Wire::Wire(QPointF start, QGraphicsItem *parent) 
     : QObject(), QGraphicsLineItem(),
     anchor_start(nullptr), anchor_end(nullptr) {
@@ -11,16 +12,36 @@ Wire::Wire(QPointF start, QGraphicsItem *parent)
 }
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    
-    painter->setPen(pen());
+    if(m_selected) {
+        painter->setPen(QPen(Qt::red, 2, Qt::DashLine));
+    }
+    else {
+        painter->setPen(QPen(Qt::black, 2));
+        painter->setBrush(Qt::NoBrush);
+    }
     painter->drawLine(line());
+
 }
 QRectF Wire::boundingRect() const{
     return QRectF(pointList.front(), pointList.back()).normalized();
 }
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-
+    if (event->button() == Qt::LeftButton) {
+        for (auto view : scene()->views()) {
+            if (GraphicsView* gview = qobject_cast<GraphicsView*>(view)) {
+                gview->currentWire = this;
+                setSelected(true);
+                break;
+            }
+        }
+    }
 }
+
+void Wire::setSelected(bool selected) {
+    m_selected = selected;
+    update();
+}
+
 void Wire::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 }

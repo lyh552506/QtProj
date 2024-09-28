@@ -1,5 +1,5 @@
 #include "AnchorPoint.hpp"
-
+#include "GraphicsView.hpp"
 AnchorPoint::AnchorPoint(QGraphicsItem* m_parent, QGraphicsItem *parent)
     : QObject(), QGraphicsItem(parent), m_selected(false),
     m_parent(m_parent) {
@@ -28,8 +28,10 @@ void AnchorPoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     QPen pen(Qt::black);
     QBrush brush(Qt::white);
     if (isSelected()) {
-        pen.setColor(Qt::blue);
-        brush.setColor(Qt::cyan);
+        pen.setColor(Qt::red);
+    } else {
+        pen.setColor(Qt::black);
+        // brush.setColor(Qt::white);
     }
     painter->setPen(pen);
     painter->setBrush(brush);
@@ -43,8 +45,13 @@ void AnchorPoint::setSelected(bool selected) {
 
 void AnchorPoint::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        setSelected(true);
-        update();
+        for (auto view : scene()->views()) {
+            if (GraphicsView* gview = qobject_cast<GraphicsView*>(view)) {
+                gview->currentAnchorPoint = this;
+                setSelected(true);
+                break;
+            }
+        }
     }
 }
 

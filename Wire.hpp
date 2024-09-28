@@ -5,8 +5,8 @@
 #include <QDebug>
 #include <QPainter>
 #include <QObject>
-#include "AnchorPoint.hpp"
 #include "GridBackground.hpp"
+#include "AnchorPoint.hpp"
 class Wire : public QObject, public QGraphicsLineItem {
     Q_OBJECT
 public:
@@ -16,6 +16,8 @@ public:
     void PressEvent(QPointF);
     void MoveEvent(QPointF);
     void ReleaseEvent(QPointF);
+    void setSelected(bool);
+    bool isSelected() const { return m_selected; }
     inline QPointF& getStartPoint() {return pointList.front();}
     inline QPointF& getEndPoint() {return pointList.back();}
 
@@ -30,4 +32,5 @@ protected:
 private:
     AnchorPoint *anchor_start, *anchor_end; 
     QList<QPointF> pointList;
+    bool m_selected;
 };

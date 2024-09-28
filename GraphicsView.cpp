@@ -45,7 +45,7 @@ void GraphicsView::putComponent_(componentType elementType, QMouseEvent* event) 
     if(newComponent)
         putComponent(newComponent, mapToScene(event->pos()));
     newComponent->setAnchorPos();
-    isPlacingComponent = false;
+    statu = statuType::_Empty;
 }
 
 AnchorPoint* GraphicsView::findAnchorPoint(const QPointF& pos) {
@@ -78,33 +78,39 @@ void GraphicsView::putWire(QMouseEvent *event) {
     AnchorPoint* Anchor = findAnchorPoint(pos);
     if(Anchor) 
         newWire->setStartAnchor(Anchor);
+    // statu = statuType::_Empty;
 }
 
-void GraphicsView::mousePressEvent(QMouseEvent *event) {
+void GraphicsView::removeCurrent() {
     if(currentComponent!=nullptr)
         currentComponent->setSelected(false);
+    if(currentWire!=nullptr)
+        currentWire->setSelected(false);
+    if(currentAnchorPoint!=nullptr) 
+        currentAnchorPoint->setSelected(false);
+}
+
+
+void GraphicsView::mousePressEvent(QMouseEvent *event) {
+    removeCurrent();
     if (event->button() == Qt::LeftButton) {
-        if (isPlacingComponent) {
+        if (statu == statuType::_PlaceComponent) {
             putComponent_(elementType, event);  
-        } else if (isPlacingWire) {
+        } else if (statu == statuType::_PlaceWire) {
             putWire(event);
         } else if (m_dragging) {
             setDragMode(QGraphicsView::ScrollHandDrag); 
             m_lastMousePosition = event->pos();
-        } else {
-            if(currentComponent!=nullptr)
-                currentComponent->setSelected(false);
-            currentComponent = nullptr;
-            currentWire = nullptr;
+        } else if (statu == statuType::_Empty){
             QGraphicsView::mousePressEvent(event);
         }
     }
 }
-void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
 
+void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
     if (m_dragging && (event->buttons() & Qt::LeftButton)) {
-        QPoint delta = event->pos() - m_lastMousePosition;
         // Drag the view
+        QPoint delta = event->pos() - m_lastMousePosition;
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
         verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
         m_lastMousePosition = event->pos();
@@ -116,6 +122,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event) {
         QGraphicsView::mouseMoveEvent(event);
     }
 }
+
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         setDragMode(QGraphicsView::NoDrag); 
@@ -130,7 +137,14 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
 }
 void GraphicsView::placeComponent() {
-    isPlacingComponent = true;
+    statu = statuType::_PlaceComponent;
+}
+void GraphicsView::placeWire() {
+    statu = statuType::_PlaceWire;
+}
+void GraphicsView::changemode() {
+
+    m_dragging = !m_dragging;
 }
 void GraphicsView::placeResistor() {
     elementType = componentType::_Resistor;
@@ -139,14 +153,6 @@ void GraphicsView::placeResistor() {
 void GraphicsView::placeCapacitor() {
     elementType = componentType::_Capacitor;
     placeComponent();
-}
-
-void GraphicsView::placeWire() {
-    isPlacingWire = true;
-}
-
-void GraphicsView::changemode() {
-    m_dragging = !m_dragging;
 }
 
 void GraphicsView::zoomIn() {
