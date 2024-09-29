@@ -36,6 +36,7 @@ public:
     void putComponent(T*, const QPointF&);
     void putComponent_(componentType, QMouseEvent*);
     void putWire(QMouseEvent*);
+    void endWire(QMouseEvent*);
 
     void placeComponent();
     void placeWire();
@@ -49,9 +50,7 @@ private:
     Component *currentComponent;
     Wire *currentWire;
     AnchorPoint *currentAnchorPoint;
-    bool isPlacingComponent;
-    bool isPlacingWire;
-    bool isPlacingAnchorPoint;
+    
     componentType elementType;
     statuType statu;
     // zoom

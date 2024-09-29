@@ -2,10 +2,9 @@
 
 GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr)
     : QGraphicsView(scene, parent), currentComponent(nullptr),
-    currentWire(nullptr), currentAnchorPoint(nullptr), 
-    isPlacingComponent(false), isPlacingWire(false), 
-    isPlacingAnchorPoint(false), elementType(componentType::_None),
+    currentWire(nullptr), currentAnchorPoint(nullptr), elementType(componentType::_None), 
     m_zoomFactor(1.0), m_dragging(false) {
+
     setDragMode(QGraphicsView::NoDrag);
 
     setRenderHint(QPainter::Antialiasing);
@@ -78,7 +77,17 @@ void GraphicsView::putWire(QMouseEvent *event) {
     AnchorPoint* Anchor = findAnchorPoint(pos);
     if(Anchor) 
         newWire->setStartAnchor(Anchor);
-    // statu = statuType::_Empty;
+
+}
+
+void GraphicsView::endWire(QMouseEvent* event) {
+    QPointF pos = mapToScene(event->pos());
+    snapToGrid(pos, 10);
+    currentWire->ReleaseEvent(mapToScene(event->pos()));
+    AnchorPoint* Anchor = findAnchorPoint(pos);
+    if(Anchor) 
+        currentWire->setEndAnchor(Anchor);
+    statu = statuType::_Empty;
 }
 
 void GraphicsView::removeCurrent() {
@@ -129,11 +138,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event) {
         if (m_dragging) {
             setDragMode(QGraphicsView::NoDrag); 
         } else if (statu == statuType::_PlaceWire) {
-            currentWire->ReleaseEvent(mapToScene(event->pos()));
-            AnchorPoint* nearAnchor = findAnchorPoint(mapToScene(event->pos()));
-            if(nearAnchor && nearAnchor->pos()==currentWire->getEndPoint()) 
-                currentWire->setEndAnchor(nearAnchor);
-            isPlacingWire = false;
+            endWire(event);
         }
     }
     QGraphicsView::mouseReleaseEvent(event);

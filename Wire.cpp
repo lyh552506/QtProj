@@ -89,8 +89,9 @@ void Wire::setStartAnchor(AnchorPoint* start) {
     updateGeometry();
 }
 void Wire::setEndAnchor(AnchorPoint* end) {
-    if(anchor_start) {
-        connect(anchor_start, &AnchorPoint::positionChanged, 
+    anchor_end = end;
+    if(anchor_end) {
+        connect(anchor_end, &AnchorPoint::positionChanged, 
                 this, &Wire::updateGeometry);
     }
     updateGeometry();
