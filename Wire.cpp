@@ -25,6 +25,12 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 QRectF Wire::boundingRect() const{
     return QRectF(pointList.front(), pointList.back()).normalized();
 }
+
+void Wire::setSelected(bool selected) {
+    m_selected = selected;
+    update();
+}
+
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         for (auto view : scene()->views()) {
@@ -35,11 +41,6 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             }
         }
     }
-}
-
-void Wire::setSelected(bool selected) {
-    m_selected = selected;
-    update();
 }
 
 void Wire::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

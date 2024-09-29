@@ -20,7 +20,7 @@ enum statuType {
     _PlaceComponent,
     _PlaceWire,
     _PlaceAnchorPoint,
-    // _SetDragMode,
+    _SetDragMode,
     _Empty,
 };
 
