@@ -99,6 +99,26 @@ void GraphicsView::removeCurrent() {
         currentAnchorPoint->setSelected(false);
 }
 
+void GraphicsView::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_Delete||event->key() == Qt::Key_Backspace) {
+        if(currentComponent!=nullptr&&currentComponent->isSelected()) {
+            scene()->removeItem(currentComponent);
+            delete currentComponent;
+            currentComponent = nullptr;
+        }
+        if(currentWire!=nullptr&&currentWire->isSelected()) {
+            scene()->removeItem(currentWire);
+            delete currentWire;
+            currentWire = nullptr;
+        }
+        if(currentAnchorPoint!=nullptr&&currentAnchorPoint->isSelected()) {
+            scene()->removeItem(currentAnchorPoint);
+            delete currentAnchorPoint;
+            currentAnchorPoint = nullptr;
+        }
+    }
+    QGraphicsView::keyPressEvent(event);
+}
 
 void GraphicsView::mousePressEvent(QMouseEvent *event) {
     removeCurrent();
